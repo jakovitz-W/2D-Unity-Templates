@@ -54,6 +54,8 @@ public class PlayerCombat : MonoBehaviour
                 }
                 
             }else if(weapon == 1){
+
+                //I did not finish ranged combat either. Consider it a coding challenge, Your can Do it I believe at you
                 //ranged
                 //Instantiate player projectile from crosshair
                     //(create seperate prefab + script)
@@ -97,7 +99,8 @@ public class PlayerCombat : MonoBehaviour
 
         if(bowActive){
             /*--Bow Combat--
-                - Move in a half circle radius in front of player following mouse/right stick
+                - point crosshair in the direction of the mouse
+                
             */
         }
     }

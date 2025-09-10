@@ -6,8 +6,10 @@ using System;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
+    //the Sound class can be found at the end of the file. it has a reference to the name & the clip file
     public Sound[] music, sfxSounds, UISounds;
 
+    //gameObjects with the audio source component,should be children of the AudioManager object
     public AudioSource musicSource, sfxSource, UISource, globalSource;
 
     private void Awake(){
@@ -20,6 +22,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //plays music globally
     public void PlayMusic(string name){
         Sound s = Array.Find(music, x => x.name == name);
 
@@ -31,22 +34,27 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //pauses all, can be resumed
     public void PauseAll(){
         musicSource.Pause();
         sfxSource.Pause();
+        globalSource.Pause();
     }
 
+    //to be used after exiting from pause menu
     public void ResumeMusic(){
         musicSource.Play();
     }
 
+    //stops all completely, restarts on next play
     public void StopAll(){
         sfxSource.Stop();
         musicSource.Stop();
         UISource.Stop();
+        globalSource.Stop();
     }
 
-    //global
+    //plays an SFX globally (same volume regardless of position). Does not repeat.
     public void PlaySFX(string name){
         Sound s = Array.Find(sfxSounds, x => x.name == name);
 
@@ -57,7 +65,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    //localized
+    //plays an SFX at the position of an object. (volume changes based on position) Does not repeat.
     public void PlaySFXAtPoint(string name, Transform spawnPoint){
 
         Sound s = Array.Find(sfxSounds, x => x.name == name);
@@ -75,6 +83,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //plays a repeating SFX at the global scale (volume not related to position)
     public AudioSource PlayRepeatingGlobal(string name){
         Sound s = Array.Find(sfxSounds, x => x.name == name);
 
@@ -90,6 +99,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //plays repeating SFX at position of an object (volume based on position)
     public AudioSource PlayRepeatingAtPoint(string name, Transform spawnPoint){
 
         Sound s = Array.Find(sfxSounds, x => x.name == name);
@@ -107,6 +117,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //for use with buttons & stuff. Does not repeat.
     public void PlayUISound(string name){
         Sound s = Array.Find(UISounds, x => x.name == name);
 
@@ -116,4 +127,11 @@ public class AudioManager : MonoBehaviour
             UISource.PlayOneShot(s.clip);
         }
     }
+}
+
+[System.Serializable]
+public class Sound
+{
+    public string name;
+    public AudioClip clip;
 }

@@ -7,10 +7,10 @@ using TMPro;
 public class DialogueSystem : MonoBehaviour
 {
     public GameObject hintText, diContainer, diText, cutsceneText;
-    public Image containerImg;
+    public Image containerImg; //profile photo of the character that's speaking
     public List<Dialogue> diList; //add to list in inspector to create dialogue instances
     public List<Dialogue> hintList;
-    private bool hint;
+    private bool hint; //flips based on current text being processed
 
     void Awake(){
         hintText.SetActive(false);
@@ -21,23 +21,19 @@ public class DialogueSystem : MonoBehaviour
     public int FindIndexByKey(string searchKey){
         
         if(!hint){
-            for(int i = 0; i < diList.Count; i++){ //using List.Count in this case is okay because the loop breaks at i = List.Count
-                if(diList[i].GetKey() == searchKey){
-                    return i;
-                }
-            }            
+            
+            Dialogue current = diList.Find(x => x.key == searchKey);
+            return diList.IndexOf(current);
         } else{
-            for(int i = 0; i < hintList.Count; i++){
-                if(hintList[i].GetKey() == searchKey){
-                    return i;
-                }
-            }     
+            Dialogue current = hintList.Find(x => x.key == searchKey);
+            return hintList.IndexOf(current);
         }
 
         return -1; //error
     }
 
     //isHint to specify if the text should be hint text or a popup dialogue box
+    //random will pick a random option
     public void SetText(string key, bool isHint, bool random, int specific){
         hint = isHint;
         int index = FindIndexByKey(key);
@@ -52,8 +48,7 @@ public class DialogueSystem : MonoBehaviour
             if(!random){
                 diText.GetComponent<TypewriterEffect>().SetString(diList[index].GetDialogue(specific), false);
             } else{
-                //add check for removal to function parameters, set to false for now
-                diText.GetComponent<TypewriterEffect>().SetString(diList[index].GetRandomOption(false), false);
+                diText.GetComponent<TypewriterEffect>().SetString(diList[index].GetRandomOption(), false);
             }
         }
     }
@@ -66,18 +61,14 @@ public class DialogueSystem : MonoBehaviour
 
 [System.Serializable]
 public class Dialogue{ //set fields in inspector
-    [SerializeField] private string key;
-    [SerializeField] private List<string> di; //using list for easy removal
+    public string key;
+    [SerializeField] private List<string> di;
     private int iteration;
     public Sprite characterImage;
     public bool hasNext = true;
 
     void Awake(){
         iteration = 0;
-    }
-
-    public string GetKey(){
-        return key;
     }
 
     //checks if next option exists & picks from list accordingly || for ordered dialogue
@@ -99,15 +90,12 @@ public class Dialogue{ //set fields in inspector
         return option;
     }
 
-    //picks random option from string array with or without removal|| for unordered dialogue
-    public string GetRandomOption(bool remove){
+    //for unordered dialogue
+    public string GetRandomOption(){
 
         int rand = Random.Range(0, (di.Count));
         string option = di[rand];
 
-        if(remove){
-            di.Remove(option);
-        }
         return option;
     }
 }

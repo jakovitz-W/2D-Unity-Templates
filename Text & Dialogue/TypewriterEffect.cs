@@ -57,9 +57,7 @@ public class TypewriterEffect : MonoBehaviour
 
     IEnumerator TypeText(){
         foreach(char letter in fullText){
-            if(isCutscene && AudioManager.Instance != null){
-                AudioManager.Instance.PlayUISound("typing");
-            }
+
             done = false;
             textMesh.text += letter;
             yield return new WaitForSeconds(typingSpeed);

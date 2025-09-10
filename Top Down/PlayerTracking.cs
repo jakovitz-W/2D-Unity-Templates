@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//take this script with the smallest grain of salt.i don't remember if i fixed the violent rotation problem or not.
 public class PlayerTracking : MonoBehaviour
 {
     public Rigidbody2D rbParent;

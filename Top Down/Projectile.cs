@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//projectiles shot from enemies
 public class Projectile : MonoBehaviour
 {
     private GameObject player;

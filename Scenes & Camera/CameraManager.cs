@@ -4,18 +4,18 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class CameraManager : MonoBehaviour
-{
+{   
     [SerializeField] protected Transform trackingTarget;
     [SerializeField] protected float followSpeed;
-    [SerializeField] float xOffset;
-    [SerializeField] float yOffset;
-    public float zPos = 0;
+    [SerializeField] private float xOffset;
+    [SerializeField] private float yOffset;
+    public float zPos = 0; //if having rendering issues try tweaking this value. usually it's around -10
     [SerializeField] protected bool isXLocked = false;
     [SerializeField] protected bool isYLocked = false;
     [SerializeField] protected bool canFollow = true;
     [SerializeField] protected bool autoScroll = false;
 
-    [SerializeField] private Light2D light;
+    [SerializeField] private Light2D light; //global light
 
     protected void Update()
     {
@@ -64,9 +64,9 @@ public class CameraManager : MonoBehaviour
             canFollow = true;
             autoScroll = false;
         }
-
     }
 
+    //for use with brightness slider
     public void UpdateLightIntensity(float intensity){
         light.intensity = intensity;
     }  

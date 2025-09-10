@@ -13,16 +13,18 @@ public class EnemyBehavior_Platformer : MonoBehaviour
     public EnemyType type;
     private Rigidbody2D rb;
     private GameObject player;
-    public float upperLimit, lowerLimit = 0f;
     public LayerMask mask;
     public int speed;
+
+    //for wandering/tracking enemies
     private bool facingRight = true;
     public bool wallHit = false;
     public Transform wallCheck;
     public float checkRange = 2.0f;
     private bool canTrack = false;
 
-    //we want the flying type to move upwards first
+    //for fluing enemies
+    public float upperLimit, lowerLimit = 0f;
     private bool upperReached = false;
     private bool lowerReached = true; 
     private float yTarget;
@@ -58,6 +60,8 @@ public class EnemyBehavior_Platformer : MonoBehaviour
         }
     }
 
+    //up/down behavior could also be done with an animation. 
+    //The animation needs to be on a parent object for this to work, otherwise the position for every single flying enemy will be the same on play
     public void Fly(float upper, float lower){
         
         if(!upperReached && lowerReached){
@@ -80,6 +84,7 @@ public class EnemyBehavior_Platformer : MonoBehaviour
         transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, yTarget), flySpeed * Time.deltaTime);
     }
 
+    //walks in one direction until it hits a wall then turns around. like da goombas in mario :o
     public void Wander(){
         
         if(Physics2D.OverlapCircle(wallCheck.position, checkRange, mask) && !wallHit){
@@ -90,6 +95,7 @@ public class EnemyBehavior_Platformer : MonoBehaviour
         rb.linearVelocity = new Vector3(speed * Time.deltaTime * 25, 0, 0);
     }
 
+    //walks towards the x direction of the player. add a buffer value to xDist if having problems
     public void Track(){
         Vector2 playerPos = player.transform.position;
         float xDist = this.transform.position.x -playerPos.x;
@@ -114,7 +120,7 @@ public class EnemyBehavior_Platformer : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other){
 
-        if(other.gameObject.CompareTag("GroundCheck")){
+        if(other.gameObject.CompareTag("GroundCheck")){ //death by stomping 
             Destroy(gameObject);
             player.GetComponent<PlayerMovement>().isInvincible = true;
         } else if(other.gameObject.CompareTag("Activator")){
@@ -132,6 +138,7 @@ public class EnemyBehavior_Platformer : MonoBehaviour
         }
     }
 
+    //debug for checking line of sight
     void OnDrawGizmosSelected(){
         if(wallCheck == null)
             return;

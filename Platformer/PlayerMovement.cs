@@ -76,12 +76,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public IEnumerator OnFinish(){
-        yield return new WaitForSeconds(3);
-        GameObject.Find("SceneManager").GetComponent<SceneManagement>().OnMain();
-    }
-
     void OnTriggerEnter2D(Collider2D other){
+
         if(other.gameObject.CompareTag("Coin")){
             levelManager.CoinCollected(other.gameObject);
             other.gameObject.SetActive(false);
